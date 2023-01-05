@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomAppThemeData {
   static ThemeData themeData = ThemeData(
+    scaffoldBackgroundColor: Colors.grey[200],
     iconTheme: IconThemeData(color: Colors.white),
     appBarTheme: appBarTheme,
     primarySwatch: Colors.orange,
@@ -15,7 +16,7 @@ class CustomAppThemeData {
 
   static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-    fillColor: Colors.grey[200],
+    fillColor: Colors.white,
     filled: true,
     border: toMakeBorderNone,
     focusedBorder: toMakeBorderNone,

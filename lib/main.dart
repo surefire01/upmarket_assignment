@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:upmarket_assignment/providers/auth_provider.dart';
 import 'package:upmarket_assignment/providers/user_details_provider.dart';
 import 'package:upmarket_assignment/theme/app_theme_data.dart';
-import 'package:upmarket_assignment/view/authentication%20_view.dart';
 import 'package:upmarket_assignment/view/wrapper.dart';
 
 import 'view/home.dart';

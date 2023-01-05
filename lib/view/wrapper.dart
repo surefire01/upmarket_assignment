@@ -13,7 +13,7 @@ class Wrapper extends StatelessWidget {
     return StreamBuilder<User?>(
         stream: AuthenticationService.user,
         builder: (context, snapshot) {
-          return snapshot.data == null ? const Authenticate() : const Home();
+          return snapshot.data == null ? Authenticate() : const Home();
         });
   }
 }

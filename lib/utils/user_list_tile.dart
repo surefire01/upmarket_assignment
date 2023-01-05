@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:upmarket_assignment/model/person_model.dart';
 
+import '../view/add_person_view.dart';
+
 class UserListTile extends StatelessWidget {
   const UserListTile({super.key, required this.person});
 
@@ -9,8 +11,8 @@ class UserListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      elevation: 1.5,
+      margin: EdgeInsets.symmetric(horizontal: 0),
+      elevation: 3,
       shadowColor: Colors.grey[200],
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -24,6 +26,22 @@ class UserListTile extends StatelessWidget {
               fontWeight: FontWeight.w500),
         ),
         leading: CircleAvatar(backgroundImage: NetworkImage(person.dpUrl)),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.edit,
+            color: Colors.grey,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddPersonView(
+                          isNew: false,
+                          screenTitle: "Edit Person",
+                          person: person,
+                        )));
+          },
+        ),
       ),
     );
   }

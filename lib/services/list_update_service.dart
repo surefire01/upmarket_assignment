@@ -1,60 +1,43 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:digimanage/models/home_screen_notifications/notify.dart';
-// import 'package:digimanage/models/home_screen_notifications/utils.dart';
-// import 'package:digimanage/services/user_data_database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:upmarket_assignment/model/person_model.dart';
+import 'package:upmarket_assignment/services/storage_service.dart';
 
+class ListUpdateService {
+  // collection reference
+  static final CollectionReference personCollection =
+      FirebaseFirestore.instance.collection('persons');
 
+  static Future createPerson(Person person, Uint8List? imageFile) async {
+    final docUser = personCollection.doc();
+    person.docId = docUser.id;
+    if (imageFile != null) {
+      person.dpUrl = await StorageService.uploadImage(imageFile, person.docId!);
+    }
 
+    return docUser.set(person.toJson());
+  }
 
-// class DatabaseNotificationService{
+  static Future deletePerson(Person person) async {
+    final docUser = personCollection.doc(person.docId);
+    await docUser.delete();
+  }
 
-//   DatabaseNotificationService();
+  static Future editPerosn(Person person) async {
+    final docUser = personCollection.doc(person.docId);
+    docUser.update(person.toJson());
+  }
 
-//   // collection reference
-//   static final CollectionReference notifyCollection = FirebaseFirestore.instance.collection('notification');
+  static List<Person> _personListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      var map = doc.data() as Map;
 
-//   static Future createNotification(Notify notify)async{
-//     final docUser = notifyCollection.doc();
-//     notify.docId = docUser.id;
-//     return docUser.set(notify.toJson());
-//   }
+      return Person.formJson(map);
+    }).toList();
+  }
 
-//   static Future deleteNotification(Notify notify)async{
-//     final docUser = notifyCollection.doc(notify.docId);
-//     if(notify.userUid == UserDatabaseService.curUserData!.uid) {
-//       docUser.delete();
-//     }
-//   }
-
-//   static Future readNotification(Notify notify)async{
-//     final docUser = notifyCollection.doc(notify.docId);
-//     docUser.update(
-//       {"read" : true}
-//     );
-//   }
-
-
-//   List<Notify> _notificationListFromSnapshot(QuerySnapshot snapshot){
-//     return snapshot.docs.map((doc){
-//       var map = doc.data() as Map;
-
-//       return toGetNotification(map)!;
-//     }).toList();
-//   }
-
-//   // create a stream for the change in the database
-//   Stream<List<Notify>> get meets{
-//     return notifyCollection.snapshots().map(_notificationListFromSnapshot);
-//   }
-
-//   // UserData _userDataFromSnapshot(DocumentSnapshot snapshot ){
-//   //   var lis = snapshot.data() as Map;
-//   //   return UserData(sugars: lis['sugars'] , name: lis['name'], strength: lis['strength'], uid: uid);
-//   // }
-//   //
-//   // Stream<UserData> get userData{
-//   //   return brewCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
-//   // }
-
-
-// }
+  // create a stream for the change in the database
+  static Stream<List<Person>> get personList {
+    return personCollection.snapshots().map(_personListFromSnapshot);
+  }
+}

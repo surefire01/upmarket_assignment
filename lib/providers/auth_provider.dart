@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:upmarket_assignment/services/authentication_service.dart';
+import 'package:upmarket_assignment/utils/toast_msg.dart';
 
 class AuthProvider with ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
   String mobile = "";
   String otp = "";
 
-  Future<bool> verifyOtp(BuildContext context) async {
-    bool isverfied = false;
+  void notify() {
+    notifyListeners();
+  }
 
+  Future<bool> verifyOtp(BuildContext context) async {
+    notifyListeners();
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -41,10 +44,15 @@ class AuthProvider with ChangeNotifier {
                   const Text("cancel", style: TextStyle(color: Colors.grey))),
           TextButton(
               onPressed: () async {
-                //await AuthenticationService.verifyOtp(otp);
+                try {
+                  await AuthenticationService.verifyOtp(otp);
+                  notifyListeners();
 
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context);
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                } catch (e) {
+                  showToastMsg("error had occured otp might be inccorect");
+                }
               },
               child: const Text(
                 "Submit",
@@ -54,9 +62,6 @@ class AuthProvider with ChangeNotifier {
       ),
     );
 
-    if (isverfied) {
-      return true;
-    }
     return false;
   }
 }

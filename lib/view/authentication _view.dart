@@ -3,19 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:upmarket_assignment/providers/auth_provider.dart';
 import 'package:upmarket_assignment/services/authentication_service.dart';
+import 'package:upmarket_assignment/utils/toast_msg.dart';
 
 class Authenticate extends StatelessWidget {
-  const Authenticate({super.key});
+  Authenticate({super.key});
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AuthProvider>(context);
+    final provider = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Form(
-              key: provider.formKey,
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -47,7 +50,7 @@ class Authenticate extends StatelessWidget {
                           ),
                           helperText: "Please Enter your Mobile Number"),
                       validator: (val) {
-                        if (val == null) {
+                        if (val == null || val.length != 10) {
                           return "Please enter valid mobile number";
                         }
                         provider.mobile = val;
@@ -57,22 +60,27 @@ class Authenticate extends StatelessWidget {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(padding: EdgeInsets.all(12)),
-                      onPressed: () async {
-                        if (provider.formKey.currentState!.validate()) {
-                          AuthenticationService.sendOtp(provider.mobile,
-                              () async {
-                            await provider.verifyOtp(context);
-                          });
-                        }
-                      },
-                      child: const Text(
-                        "Send OTP",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
+                    child: Consumer<AuthProvider>(
+                        builder: (context, value, child) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(12)),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            showToastMsg("Please wait sending otp...");
+
+                            AuthenticationService.sendOtp(provider.mobile,
+                                () async {
+                              await provider.verifyOtp(context);
+                            });
+                          }
+                        },
+                        child: const Text(
+                          "Send OTP",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      );
+                    }),
                   ),
                 ],
               ),
