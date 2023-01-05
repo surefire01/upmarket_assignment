@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:upmarket_assignment/providers/auth_provider.dart';
+import 'package:upmarket_assignment/services/authentication_service.dart';
 
 class Authenticate extends StatelessWidget {
   const Authenticate({super.key});
@@ -15,7 +17,6 @@ class Authenticate extends StatelessWidget {
             child: Form(
               key: provider.formKey,
               child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -26,7 +27,25 @@ class Authenticate extends StatelessWidget {
                     height: 50,
                   ),
                   TextFormField(
-                      decoration: InputDecoration(label: Text("Mobile Number")),
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                      decoration: InputDecoration(
+                          prefixIcon: SizedBox(
+                            width: 50,
+                            child: Row(
+                              children: const [
+                                Text("   +91 "),
+                                Text(
+                                  "|",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w300),
+                                )
+                              ],
+                            ),
+                          ),
+                          helperText: "Please Enter your Mobile Number"),
                       validator: (val) {
                         if (val == null) {
                           return "Please enter valid mobile number";
@@ -34,15 +53,22 @@ class Authenticate extends StatelessWidget {
                         provider.mobile = val;
                       }),
                   const SizedBox(
-                    height: 20,
+                    height: 40,
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       style:
                           ElevatedButton.styleFrom(padding: EdgeInsets.all(12)),
-                      onPressed: () {},
-                      child: Text(
+                      onPressed: () async {
+                        if (provider.formKey.currentState!.validate()) {
+                          AuthenticationService.sendOtp(provider.mobile,
+                              () async {
+                            await provider.verifyOtp(context);
+                          });
+                        }
+                      },
+                      child: const Text(
                         "Send OTP",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
