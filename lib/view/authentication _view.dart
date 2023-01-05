@@ -5,6 +5,7 @@ import 'package:upmarket_assignment/providers/auth_provider.dart';
 import 'package:upmarket_assignment/services/authentication_service.dart';
 import 'package:upmarket_assignment/utils/toast_msg.dart';
 
+// login/Authentication page
 class Authenticate extends StatelessWidget {
   Authenticate({super.key});
 

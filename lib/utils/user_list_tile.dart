@@ -3,6 +3,7 @@ import 'package:upmarket_assignment/model/person_model.dart';
 
 import '../view/add_person_view.dart';
 
+// person presentation tile
 class UserListTile extends StatelessWidget {
   const UserListTile({super.key, required this.person});
 

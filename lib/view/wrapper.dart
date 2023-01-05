@@ -5,6 +5,7 @@ import 'package:upmarket_assignment/view/home.dart';
 
 import 'authentication _view.dart';
 
+// to check authentication status of user and decide the view to be shown
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
 

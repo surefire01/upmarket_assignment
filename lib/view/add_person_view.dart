@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:upmarket_assignment/providers/user_details_provider.dart';
@@ -7,6 +5,7 @@ import 'package:upmarket_assignment/utils/loading_widget.dart';
 
 import '../model/person_model.dart';
 
+// to add/edit person
 class AddPersonView extends StatelessWidget {
   AddPersonView({
     super.key,

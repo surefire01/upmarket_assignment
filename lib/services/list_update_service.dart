@@ -8,6 +8,7 @@ class ListUpdateService {
   static final CollectionReference personCollection =
       FirebaseFirestore.instance.collection('persons');
 
+  // to add person to firestore
   static Future createPerson(Person person, Uint8List? imageFile) async {
     final docUser = personCollection.doc();
     person.docId = docUser.id;
@@ -18,16 +19,19 @@ class ListUpdateService {
     return docUser.set(person.toJson());
   }
 
+  // to delete person from firestore
   static Future deletePerson(Person person) async {
     final docUser = personCollection.doc(person.docId);
     await docUser.delete();
   }
 
+  // to edit fields of person
   static Future editPerosn(Person person) async {
     final docUser = personCollection.doc(person.docId);
     docUser.update(person.toJson());
   }
 
+  // person list
   static List<Person> _personListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       var map = doc.data() as Map;

@@ -7,10 +7,7 @@ class AuthProvider with ChangeNotifier {
   String mobile = "";
   String otp = "";
 
-  void notify() {
-    notifyListeners();
-  }
-
+  // to enter and submit otp
   Future<bool> verifyOtp(BuildContext context) async {
     notifyListeners();
     await showDialog(

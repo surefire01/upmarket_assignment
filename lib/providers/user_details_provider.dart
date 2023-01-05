@@ -10,6 +10,8 @@ class UserDetailsProvider with ChangeNotifier {
   Person person = Person();
 
   bool isLoading = false;
+
+  // we get this by selecting image from the device
   Uint8List? image;
 
   Future<void> updatePersonList(bool isNew) async {
@@ -29,8 +31,7 @@ class UserDetailsProvider with ChangeNotifier {
   }
 
   // upload image and get url
-  // temp varible is used to temp store the image when user confirm this then the image is uploaded in a folder with specific docId
-  Future<void> pickImage({bool isTemp = true, String docId = ""}) async {
+  Future<void> pickImage({String docId = ""}) async {
     XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (file != null) {
@@ -39,6 +40,7 @@ class UserDetailsProvider with ChangeNotifier {
     }
   }
 
+  // to clear the last edit
   void clear() {
     person = Person();
     isLoading = false;
